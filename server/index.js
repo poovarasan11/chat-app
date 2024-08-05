@@ -29,6 +29,6 @@ app.use("/api", router);
 
 connectDB().then(() => {
   app.listen(PORT, () => {
-    console.log("Server Rening at", PORT);
+    console.log("Server Rening At", PORT);
   });
 });
