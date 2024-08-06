@@ -5,7 +5,7 @@ import CheckEmailPage from "../pages/CheckEmailPage";
 import CheckPasswordPage from "../pages/CheckPasswordPage";
 import Home from "../pages/Home";
 import MessagePage from "../components/MessagePage";
-
+import AuthLayouts from "../layout/index";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -13,22 +13,35 @@ const router = createBrowserRouter([
     children: [
       {
         path: "register",
-        element: <RegisterPage />,
+        element: (
+          <AuthLayouts>
+            <RegisterPage />
+          </AuthLayouts>
+        ),
       },
       {
         path: "email",
-        element: <CheckEmailPage />,
+        element: (
+          <AuthLayouts>
+            {" "}
+            <CheckEmailPage />
+          </AuthLayouts>
+        ),
       },
       {
         path: "password",
-        element: <CheckPasswordPage />,
+        element: (
+          <AuthLayouts>
+            <CheckPasswordPage />
+          </AuthLayouts>
+        ),
       },
       {
         path: "",
         element: <Home />,
         children: [
           {
-            path: "userId",
+            path: ":userId",
             element: <MessagePage />,
           },
         ],
