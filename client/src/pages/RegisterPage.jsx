@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import uploadFile from "../helpers/UploadeFile";
+import axios from "axios";
+import toast from "react-hot-toast";
+
 const RegisterPage = () => {
   const [data, setData] = useState({
     name: "",
@@ -21,9 +25,17 @@ const RegisterPage = () => {
     });
   };
 
-  const handleUploadPhoto = (e) => {
+  const handleUploadPhoto = async (e) => {
     const file = e.target.files[0];
+    const uploadPhoto = await uploadFile(file);
+    // console.log("uploadPhoto::", uploadPhoto);
     setUploadPhoto(file);
+    setData((preve) => {
+      return {
+        ...preve,
+        profile_pic: uploadPhoto?.url,
+      };
+    });
   };
   // console.log("uploadPhoto::", uploadPhoto);
   const handleClearUploadPhoto = (e) => {
@@ -33,15 +45,23 @@ const RegisterPage = () => {
     setUploadPhoto(null);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("data::", data);
+    const URL = `${process.env.REACT_APP_BACKEND_URL}/api/register`;
+    try {
+      const response = await axios.post(URL, data);
+      console.log("response::", response);
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+      // console.log("error::", error);
+    }
   };
 
   return (
     <div className="mt-4">
-      <div className="bg-white w-full max-w-sm mx-2 rounded overflow-hidden p-4 mx-auto ">
+      <div className="bg-white w-full max-w-md  rounded overflow-hidden p-4 mx-auto ">
         <h3>Welcome to chat app!</h3>
         <form className="grid gap-3 mt-4" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-1">
